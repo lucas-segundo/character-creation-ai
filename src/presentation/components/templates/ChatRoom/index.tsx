@@ -4,9 +4,9 @@ import { SendMessageInput } from "../../organisms/SendMessageInput"
 
 export const ChatRoom = () => {
   return (
-    <div className="flex flex-col items-center h-dvh">
+    <div className="flex flex-col h-dvh">
       <Header />
-      <div className="h-full">
+      <div className="flex-1">
         <Chat />
       </div>
       <SendMessageInput />  
