@@ -1,8 +1,13 @@
 import { faker } from '@faker-js/faker';
+import { Message } from '.';
 
-export const mockMessage = () => ({
+export const mockMessage = (): Message => ({
   id: faker.string.uuid(),
   text: faker.lorem.sentence(),
   userID: faker.string.uuid(),
   chatID: faker.string.uuid(),
+  sender: faker.number.int({
+    min: 0,
+    max: 2,
+  }) as Message['sender'],
 });
