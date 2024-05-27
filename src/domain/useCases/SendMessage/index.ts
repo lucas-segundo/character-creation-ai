@@ -1,3 +1,5 @@
+import { Message } from "@/domain/entities/Message";
+
 namespace SendMessage {
   export interface Params {
     text: string;
@@ -5,7 +7,7 @@ namespace SendMessage {
   }
 
   export interface UseCase {
-    send: (params: Params) => Promise<void>;
+    send: (params: Params) => Promise<Message>;
   }
 }
 
