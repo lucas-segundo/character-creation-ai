@@ -7,7 +7,6 @@ export enum MessageSenderEnum {
 export interface Message {
   id: string;
   text: string;
-  userID: string;
   chatID: string;
   sender: MessageSenderEnum;
 }
