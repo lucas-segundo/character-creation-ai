@@ -2,7 +2,7 @@ import { Message } from "@/domain/entities/Message";
 
 namespace SendMessage {
   export interface Params {
-    text: string;
+    texts: string[];
     chatID: string;
   }
 
