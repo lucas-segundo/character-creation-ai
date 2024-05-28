@@ -4,15 +4,17 @@ import { SendMessages } from "@/domain/useCases/SendMessages";
 
 export const makeSendMessagesUseCase = (): SendMessages.UseCase => {
   class SendMessagesUseCaseMocked implements SendMessages.UseCase {
-    async send(messages: SendMessages.Messages): Promise<Message[]> {
+    async send(messages: SendMessages.Messages): Promise<SendMessages.Response> {
       console.log(messages);
 
-      const response = [
+      const responseMessages = [
         mockMessage(),
         mockMessage()
       ]
       
-      return response;
+      return {
+        messages: responseMessages
+      };
     }
   }
 
