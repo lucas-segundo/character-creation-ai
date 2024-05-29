@@ -25,4 +25,11 @@ describe('MessageContent', () => {
 
     expect(screen.getByTestId('system-icon')).toBeDefined()
   })
+
+  it('should render with default icon', async () => {
+    const message: Message = {...mockMessage(), sender: 5 as MessageSenderEnum}
+    render(<MessageContent message={message} />)
+
+    expect(screen.getByTestId('default-icon')).toBeDefined()
+  })
 })

@@ -26,7 +26,7 @@ export const MessageContent = ({ message }: Props) => {
   return (
     <div className="flex items-center border-b border-gray-600 py-3">
       <div className="pr-2">
-        {senderIcon?.icon || <GiOrbit />}
+        {senderIcon?.icon || <GiOrbit data-testid="default-icon" />}
       </div>
       <p className="text-gray-300">{message.text}</p>
     </div>
