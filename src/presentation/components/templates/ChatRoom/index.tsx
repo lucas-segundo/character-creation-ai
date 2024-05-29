@@ -27,8 +27,8 @@ export const ChatRoom = ({ sendMessageUseCase }: Props) => {
 
   const handleOnSendMessage = async (text: string) => {
     try {
-      const responseMessages = await sendMessages(text)
-      setMessagesState(prev => [...prev, ...responseMessages])
+      const response = await sendMessages(text)
+      setMessagesState(prev => [...prev, ...response.messages])
     } catch {}
   }
 
