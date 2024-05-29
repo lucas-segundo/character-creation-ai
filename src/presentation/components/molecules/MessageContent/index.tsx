@@ -8,15 +8,15 @@ export interface Props {
 const senderIcons = [
   {
     sender: MessageSenderEnum.BOT,
-    icon: <GiRobotAntennas />
+    icon: <GiRobotAntennas data-testid="bot-icon" />
   },
   {
     sender: MessageSenderEnum.USER,
-    icon: <GiPerson />
+    icon: <GiPerson data-testid="user-icon" />
   },
   {
     sender: MessageSenderEnum.SYSTEM,
-    icon: <GiRobotGrab />
+    icon: <GiRobotGrab data-testid="system-icon" />
   },
 ]
 
