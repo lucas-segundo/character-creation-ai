@@ -1,13 +1,8 @@
-import { Message, MessageSenderEnum } from '@/domain/entities/Message';
-import {
-  GiRobotAntennas,
-  GiPerson,
-  GiRobotGrab,
-  GiOrbit,
-} from 'react-icons/gi';
+import { Message, MessageSenderEnum } from '@/domain/entities/Message'
+import { GiRobotAntennas, GiPerson, GiRobotGrab, GiOrbit } from 'react-icons/gi'
 
 export interface Props {
-  message: Message;
+  message: Message
 }
 
 const senderIcons = [
@@ -23,12 +18,12 @@ const senderIcons = [
     sender: MessageSenderEnum.SYSTEM,
     icon: <GiRobotGrab data-testid="system-icon" />,
   },
-];
+]
 
 export const MessageContent = ({ message }: Props) => {
   const senderIcon = senderIcons.find(
     (senderIcon) => senderIcon.sender == message.sender,
-  );
+  )
 
   return (
     <div className="flex items-center border-b border-gray-600 py-3">
@@ -37,5 +32,5 @@ export const MessageContent = ({ message }: Props) => {
       </div>
       <p className="text-gray-300">{message.text}</p>
     </div>
-  );
-};
+  )
+}

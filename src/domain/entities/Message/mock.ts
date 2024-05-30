@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker';
-import { Message } from '.';
+import { faker } from '@faker-js/faker'
+import { Message } from '.'
 
 export const mockMessage = (): Message => ({
   id: faker.string.uuid(),
@@ -9,4 +9,4 @@ export const mockMessage = (): Message => ({
     min: 0,
     max: 2,
   }) as Message['sender'],
-});
+})

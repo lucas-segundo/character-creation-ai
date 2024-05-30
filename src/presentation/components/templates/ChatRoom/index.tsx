@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Chat } from '../../organisms/Chat';
-import { Header } from '../../organisms/Header';
-import { SendMessageInput } from '../../organisms/SendMessageInput';
-import { Message, MessageSenderEnum } from '@/domain/entities/Message';
-import { SendMessages } from '@/domain/useCases/SendMessages';
+import { useState } from 'react'
+import { Chat } from '../../organisms/Chat'
+import { Header } from '../../organisms/Header'
+import { SendMessageInput } from '../../organisms/SendMessageInput'
+import { Message, MessageSenderEnum } from '@/domain/entities/Message'
+import { SendMessages } from '@/domain/useCases/SendMessages'
 
 interface Props {
-  sendMessageUseCase: SendMessages.UseCase;
+  sendMessageUseCase: SendMessages.UseCase
 }
 
 export const ChatRoom = ({ sendMessageUseCase }: Props) => {
-  const [messagesState, setMessagesState] = useState<Message[]>([]);
+  const [messagesState, setMessagesState] = useState<Message[]>([])
 
   const sendMessages = async (text: string) => {
     const messages: SendMessages.Messages = [
@@ -20,17 +20,17 @@ export const ChatRoom = ({ sendMessageUseCase }: Props) => {
         sender: MessageSenderEnum.USER,
         text,
       },
-    ];
+    ]
 
-    return await sendMessageUseCase.send({ messages });
-  };
+    return await sendMessageUseCase.send({ messages })
+  }
 
   const handleOnSendMessage = async (text: string) => {
     try {
-      const response = await sendMessages(text);
-      setMessagesState((prev) => [...prev, ...response.messages]);
+      const response = await sendMessages(text)
+      setMessagesState((prev) => [...prev, ...response.messages])
     } catch {}
-  };
+  }
 
   return (
     <div className="flex flex-col h-dvh">
@@ -40,5 +40,5 @@ export const ChatRoom = ({ sendMessageUseCase }: Props) => {
       </div>
       <SendMessageInput onSend={({ text }) => handleOnSendMessage(text)} />
     </div>
-  );
-};
+  )
+}

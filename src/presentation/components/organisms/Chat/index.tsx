@@ -1,8 +1,8 @@
-import { MessageContent } from '../../molecules/MessageContent';
-import { Message } from '@/domain/entities/Message';
+import { MessageContent } from '../../molecules/MessageContent'
+import { Message } from '@/domain/entities/Message'
 
 interface Props {
-  messages: Message[];
+  messages: Message[]
 }
 
 export const Chat = ({ messages }: Props) => {
@@ -14,5 +14,5 @@ export const Chat = ({ messages }: Props) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
