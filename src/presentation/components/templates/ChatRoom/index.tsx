@@ -4,12 +4,15 @@ import { Header } from '../../organisms/Header'
 import { SendMessageInput } from '../../organisms/SendMessageInput'
 import { Message, MessageSenderEnum } from '@/domain/entities/Message'
 import { SendMessages } from '@/domain/useCases/SendMessages'
+import { ErrorNotifier } from '@/presentation/interfaces/ErrorNotifier'
+import { UnexpectedError } from '@/domain/errors/UnexpectedError'
 
 interface Props {
   sendMessageUseCase: SendMessages.UseCase
+  errorNotifier: ErrorNotifier
 }
 
-export const ChatRoom = ({ sendMessageUseCase }: Props) => {
+export const ChatRoom = ({ sendMessageUseCase, errorNotifier }: Props) => {
   const [messagesState, setMessagesState] = useState<Message[]>([])
 
   const sendMessages = async (text: string) => {
@@ -29,7 +32,9 @@ export const ChatRoom = ({ sendMessageUseCase }: Props) => {
     try {
       const response = await sendMessages(text)
       setMessagesState((prev) => [...prev, ...response.messages])
-    } catch {}
+    } catch {
+      errorNotifier.notify(new UnexpectedError())
+    }
   }
 
   return (
