@@ -1,4 +1,3 @@
-import { Message } from '@/domain/entities/Message'
 import { mockMessage } from '@/domain/entities/Message/mock'
 import { SendMessages } from '@/domain/useCases/SendMessages'
 
