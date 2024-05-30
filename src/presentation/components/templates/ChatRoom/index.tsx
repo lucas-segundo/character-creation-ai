@@ -22,7 +22,7 @@ export const ChatRoom = ({ sendMessageUseCase }: Props) => {
       }
     ]
 
-    return await sendMessageUseCase.send(messages)
+    return await sendMessageUseCase.send({ messages })
   }
 
   const handleOnSendMessage = async (text: string) => {
