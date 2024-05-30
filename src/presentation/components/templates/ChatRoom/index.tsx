@@ -38,7 +38,7 @@ export const ChatRoom = ({ sendMessageUseCase }: Props) => {
       <div className="flex-1 overflow-y-auto">
         <Chat messages={messagesState} />
       </div>
-      <SendMessageInput onSend={({ text }) => text && handleOnSendMessage(text)}/>  
+      <SendMessageInput onSend={({ text }) => handleOnSendMessage(text)}/>  
     </div>
   )
 }
