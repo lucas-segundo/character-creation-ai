@@ -1,3 +1,3 @@
 export interface ErrorNotifier {
-  notify: (error: Error) => void
+  notify: (error: Error) => void;
 }
