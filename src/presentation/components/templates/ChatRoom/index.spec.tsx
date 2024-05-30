@@ -9,7 +9,7 @@ import { mockMessage } from '@/domain/entities/Message/mock';
 import { SendMessages } from '@/domain/useCases/SendMessages';
 
 describe('ChatRoom', () => {
-  it('should call send messages with right params', () => {
+  it('should call send messages with right params', async () => {
     const sendMessageUseCase = mockSendMessages();
     render(<ChatRoom sendMessageUseCase={sendMessageUseCase} />);
 
@@ -21,15 +21,12 @@ describe('ChatRoom', () => {
     const user = userEvent.setup();
     const text = faker.lorem.sentence();
 
-    act(() => {
-      user.type(screen.getByTestId('message-input'), text);
-      user.click(screen.getByTestId('send-button'));
-    });
+    await user.type(screen.getByTestId('message-input'), text);
+    await user.click(screen.getByTestId('send-button'));
 
-    waitFor(() =>
-      expect(sendMessageUseCase.send).toBeCalledWith([
-        { chatID: '1', sender: MessageSenderEnum.USER, text },
-      ]),
-    );
+    const params: SendMessages.Params = {
+      messages: [{ chatID: '1', sender: MessageSenderEnum.USER, text }],
+    };
+    expect(sendMessageUseCase.send).toBeCalledWith(params);
   });
 });
