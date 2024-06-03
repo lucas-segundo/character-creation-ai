@@ -11,6 +11,11 @@ interface Props {
 
 export const SendMessageInput = ({ onSend }: Props) => {
   const [text, setText] = useState('')
+
+  const handleOnClick = () => {
+    onSend({ text })
+    setText('')
+  }
   return (
     <div className="flex justify-center px-4 w-full">
       <div className="border border-gray-800 bg-black w-[640px] p-6 rounded">
@@ -26,7 +31,7 @@ export const SendMessageInput = ({ onSend }: Props) => {
           />
           <MdSend
             data-testid="send-button"
-            onClick={() => onSend({ text })}
+            onClick={handleOnClick}
             size={25}
             color="white"
           />

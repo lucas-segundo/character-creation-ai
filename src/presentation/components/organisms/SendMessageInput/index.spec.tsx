@@ -17,4 +17,17 @@ describe('SendMessageInput', () => {
 
     expect(mockedOnSend).toBeCalledWith({ text })
   })
+
+  it('should clear input after send', async () => {
+    const mockedOnSend = vi.fn()
+    render(<SendMessageInput onSend={mockedOnSend} />)
+
+    const user = userEvent.setup()
+    const text = faker.lorem.sentence()
+
+    await user.type(screen.getByTestId('message-input'), text)
+    await user.click(screen.getByTestId('send-button'))
+
+    expect(screen.getByTestId('message-input')).toHaveValue('')
+  })
 })
