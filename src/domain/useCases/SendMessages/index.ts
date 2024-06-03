@@ -4,6 +4,7 @@ export namespace SendMessages {
   export type Messages = Pick<Message, 'text' | 'chatID' | 'sender'>[]
 
   export interface Params {
+    chatID: string
     messages: Messages
   }
 
