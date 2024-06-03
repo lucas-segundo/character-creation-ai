@@ -24,9 +24,8 @@ const makeSUT = () => {
 }
 
 describe('ChatRoom', () => {
-  const { sendMessageUseCase, errorNotifier } = makeSUT()
-
   it('should call send messages with right params', async () => {
+    const { sendMessageUseCase } = makeSUT()
     const response: SendMessages.Response = {
       messages: [mockMessage()],
     }
@@ -45,6 +44,8 @@ describe('ChatRoom', () => {
   })
 
   it('should call error notifier with right params', async () => {
+    const { sendMessageUseCase, errorNotifier } = makeSUT()
+
     const error = new UnexpectedError()
     sendMessageUseCase.send.mockRejectedValue(error)
 
