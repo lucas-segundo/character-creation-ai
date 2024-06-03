@@ -1,7 +1,7 @@
-import { vi } from 'vitest'
+import { vi, Mocked } from 'vitest'
 import { AIContentGenerator } from '.'
 
 export const mockAIContentGeneratorImplementation =
-  (): AIContentGenerator.Implementation => ({
+  (): Mocked<AIContentGenerator.Implementation> => ({
     generate: vi.fn(),
   })
