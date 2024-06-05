@@ -1,11 +1,14 @@
 import { Message } from '@/domain/entities/Message'
 
 export namespace SendMessages {
-  export type Messages = Pick<Message, 'text' | 'chatID' | 'sender'>[]
+  export interface MessageParam
+    extends Pick<Message, 'text' | 'chatID' | 'sender'> {
+    id?: string
+  }
 
   export interface Params {
     chatID: string
-    messages: Messages
+    messages: MessageParam[]
   }
 
   export interface Response {
