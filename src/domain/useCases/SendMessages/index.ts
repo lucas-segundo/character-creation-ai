@@ -1,8 +1,7 @@
 import { Message } from '@/domain/entities/Message'
 
 export namespace SendMessages {
-  export interface MessageParam
-    extends Pick<Message, 'text' | 'chatID' | 'sender'> {
+  export interface MessageParam extends Pick<Message, 'text' | 'sender'> {
     id?: string
   }
 
