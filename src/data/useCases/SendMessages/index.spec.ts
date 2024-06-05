@@ -5,11 +5,21 @@ import { mockMessage } from '@/domain/entities/Message/mock'
 import { AIContentGenerator } from '@/data/interfaces/AIContentGenerator'
 import { SendMessages } from '@/domain/useCases/SendMessages'
 import { faker } from '@faker-js/faker'
+import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
+import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
+import { MessageSenderEnum } from '@/domain/entities/Message'
 
 const makeSUT = () => {
   const aiContentGenerator = mockAIContentGeneratorImplementation()
-  const sut = new SendMessagesUseCase(aiContentGenerator)
-  return { sut, aiContentGenerator }
+  const messagesCreater = mockMessagesCreaterImplementation()
+  const sut = new SendMessagesUseCase(aiContentGenerator, messagesCreater)
+
+  const aiResponse: AIContentGenerator.Response = {
+    texts: [faker.lorem.sentence(), faker.lorem.sentence()],
+  }
+  aiContentGenerator.generate.mockResolvedValueOnce(aiResponse)
+
+  return { sut, aiContentGenerator, messagesCreater, aiResponse }
 }
 
 describe('SendMessagesUseCase', () => {
@@ -27,5 +37,28 @@ describe('SendMessagesUseCase', () => {
       texts: messages.map((message) => message.text),
     }
     expect(aiContentGenerator.generate).toBeCalledWith(expectedParams)
+  })
+
+  it('should call create with correct params', async () => {
+    const { sut, messagesCreater, aiResponse } = makeSUT()
+
+    const messages = [mockMessage(), mockMessage()]
+    const sendParams: SendMessages.Params = {
+      chatID: faker.string.uuid(),
+      messages,
+    }
+    await sut.send(sendParams)
+
+    const aiMessages = aiResponse.texts.map((text) => ({
+      text,
+      chatID: sendParams.chatID,
+      sender: MessageSenderEnum.BOT,
+    }))
+
+    const messagesWithoutID = [...aiMessages]
+    const expectedParams: MessagesCreater.Params = {
+      messages: messagesWithoutID,
+    }
+    expect(messagesCreater.create).toBeCalledWith(expectedParams)
   })
 })
