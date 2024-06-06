@@ -10,10 +10,7 @@ export namespace SendMessages {
     messages: MessageParam[]
   }
 
-  export interface Response {
-    messages: Message[]
-  }
   export interface UseCase {
-    send: (params: Params) => Promise<Response>
+    send: (params: Params) => Promise<Message[]>
   }
 }

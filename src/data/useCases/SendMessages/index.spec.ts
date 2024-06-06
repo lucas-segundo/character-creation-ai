@@ -75,6 +75,6 @@ describe('SendMessagesUseCase', () => {
 
     const messagesCreated = await sut.send(sendParams)
 
-    expect(messagesCreated).toEqual({ messages })
+    expect(messagesCreated).toEqual(messages)
   })
 })

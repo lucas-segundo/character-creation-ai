@@ -1,6 +1,6 @@
 import { AIContentGenerator } from '@/data/interfaces/AIContentGenerator'
 import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
-import { MessageSenderEnum } from '@/domain/entities/Message'
+import { Message, MessageSenderEnum } from '@/domain/entities/Message'
 import { SendMessages } from '@/domain/useCases/SendMessages'
 
 export class SendMessagesUseCase implements SendMessages.UseCase {
@@ -9,7 +9,7 @@ export class SendMessagesUseCase implements SendMessages.UseCase {
     private readonly messagesCreater: MessagesCreater.Implementation,
   ) {}
 
-  async send(params: SendMessages.Params): Promise<SendMessages.Response> {
+  async send(params: SendMessages.Params): Promise<Message[]> {
     const response = await this.aiContentGenerator.generate({
       texts: params.messages.map((message) => message.text),
     })
@@ -36,8 +36,6 @@ export class SendMessagesUseCase implements SendMessages.UseCase {
     const messagesCreated = await this.messagesCreater.create({
       messages: allMessagesToCreate,
     })
-    return {
-      messages: messagesCreated,
-    }
+    return messagesCreated
   }
 }
