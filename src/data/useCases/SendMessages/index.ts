@@ -13,29 +13,46 @@ export class SendMessagesUseCase implements SendMessages.UseCase {
     const response = await this.aiContentGenerator.generate({
       texts: params.messages.map((message) => message.text),
     })
+    const createdMessages = await this.createMessages(response, params)
 
-    const responseMessages = response.texts.map((text) => ({
-      text,
-      chatID: params.chatID,
-      sender: MessageSenderEnum.BOT,
-    }))
+    return createdMessages
+  }
 
-    const previousMessages = params.messages.map((message) => ({
-      ...message,
-      chatID: params.chatID,
-    }))
-    const previousMessagesWithoutID = previousMessages.filter(
-      (message) => !message.id,
+  private async createMessages(
+    response: AIContentGenerator.Response,
+    params: SendMessages.Params,
+  ) {
+    const allMessagesToCreate = this.filterAndJoinMessagesToCreate(
+      params.messages,
+      response,
+      params.chatID,
     )
-
-    const allMessagesToCreate: MessagesCreater.Params['messages'] = [
-      ...previousMessagesWithoutID,
-      ...responseMessages,
-    ]
 
     const messagesCreated = await this.messagesCreater.create({
       messages: allMessagesToCreate,
     })
     return messagesCreated
+  }
+
+  private filterAndJoinMessagesToCreate(
+    messages: SendMessages.Params['messages'],
+    response: AIContentGenerator.Response,
+    chatID: string,
+  ) {
+    const responseMessages = response.texts.map((text) => ({
+      text,
+      chatID,
+      sender: MessageSenderEnum.BOT,
+    }))
+
+    const previousMessages = messages.map((message) => ({
+      ...message,
+      chatID,
+    }))
+    const previousMessagesWithoutID = previousMessages.filter(
+      (message) => !message.id,
+    )
+
+    return [...previousMessagesWithoutID, ...responseMessages]
   }
 }
