@@ -61,4 +61,20 @@ describe('SendMessagesUseCase', () => {
     }
     expect(messagesCreater.create).toBeCalledWith(expectedParams)
   })
+
+  it('should return created messages', async () => {
+    const { sut, messagesCreater } = makeSUT()
+
+    const messages = [mockMessage(), mockMessage()]
+    messagesCreater.create.mockResolvedValueOnce(messages)
+
+    const sendParams: SendMessages.Params = {
+      chatID: faker.string.uuid(),
+      messages,
+    }
+
+    const messagesCreated = await sut.send(sendParams)
+
+    expect(messagesCreated).toEqual({ messages })
+  })
 })

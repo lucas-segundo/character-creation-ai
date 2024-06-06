@@ -28,14 +28,16 @@ export class SendMessagesUseCase implements SendMessages.UseCase {
       (message) => !message.id,
     )
 
-    const allMessages: MessagesCreater.Params['messages'] = [
+    const allMessagesToCreate: MessagesCreater.Params['messages'] = [
       ...previousMessagesWithoutID,
       ...responseMessages,
     ]
 
-    await this.messagesCreater.create({
-      messages: allMessages,
+    const messagesCreated = await this.messagesCreater.create({
+      messages: allMessagesToCreate,
     })
-    return {} as SendMessages.Response
+    return {
+      messages: messagesCreated,
+    }
   }
 }
