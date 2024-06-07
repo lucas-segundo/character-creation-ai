@@ -13,31 +13,14 @@ export class SendMessagesUseCase implements SendMessages.UseCase {
     const response = await this.aiContentGenerator.generate({
       texts: params.messages.map((message) => message.text),
     })
-    const createdMessages = await this.createMessages(response, params)
+    const createdMessages = await this.createMessages(params.chatID, response)
 
     return createdMessages
   }
 
   private async createMessages(
-    response: AIContentGenerator.Response,
-    params: SendMessages.Params,
-  ) {
-    const allMessagesToCreate = this.filterAndJoinMessagesToCreate(
-      params.messages,
-      response,
-      params.chatID,
-    )
-
-    const messagesCreated = await this.messagesCreater.create({
-      messages: allMessagesToCreate,
-    })
-    return messagesCreated
-  }
-
-  private filterAndJoinMessagesToCreate(
-    messages: SendMessages.Params['messages'],
-    response: AIContentGenerator.Response,
     chatID: string,
+    response: AIContentGenerator.Response,
   ) {
     const responseMessages = response.texts.map((text) => ({
       text,
@@ -45,14 +28,9 @@ export class SendMessagesUseCase implements SendMessages.UseCase {
       sender: MessageSenderEnum.BOT,
     }))
 
-    const previousMessages = messages.map((message) => ({
-      ...message,
-      chatID,
-    }))
-    const previousMessagesWithoutID = previousMessages.filter(
-      (message) => !message.id,
-    )
-
-    return [...previousMessagesWithoutID, ...responseMessages]
+    const createdMessages = await this.messagesCreater.create({
+      messages: responseMessages,
+    })
+    return createdMessages
   }
 }
