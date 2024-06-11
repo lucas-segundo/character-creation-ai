@@ -2,7 +2,7 @@ import { Message } from '@/domain/entities/Message'
 
 export interface CreateMessagesParams {
   chatID: string
-  messages: Message[]
+  messages: Pick<Message, 'sender' | 'text'>[]
 }
 
 export interface CreateMessagesUseCase {
