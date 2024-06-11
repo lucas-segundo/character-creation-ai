@@ -3,35 +3,45 @@ import { Chat } from '../../organisms/Chat'
 import { Header } from '../../organisms/Header'
 import { SendMessageInput } from '../../organisms/SendMessageInput'
 import { Message, MessageSenderEnum } from '@/domain/entities/Message'
-import { SendMessages } from '@/domain/useCases/SendMessages'
 import { ErrorNotifier } from '@/presentation/interfaces/ErrorNotifier'
 import { UnexpectedError } from '@/domain/errors/UnexpectedError'
+import { SendMessagesUseCase } from '@/domain/useCases/SendMessages'
+import { CreateMessagesUseCase } from '@/domain/useCases/CreateMessages'
 
 interface Props {
-  sendMessageUseCase: SendMessages.UseCase
+  sendMessageUseCase: SendMessagesUseCase
+  createMessagesUseCase: CreateMessagesUseCase
   errorNotifier: ErrorNotifier
 }
 
-export const ChatRoom = ({ sendMessageUseCase, errorNotifier }: Props) => {
+export const ChatRoom = ({
+  sendMessageUseCase,
+  createMessagesUseCase,
+  errorNotifier,
+}: Props) => {
   const [messagesState, setMessagesState] = useState<Message[]>([])
 
   const sendMessages = async (text: string) => {
-    const messages: SendMessages.Messages = [
-      ...messagesState,
-      {
-        chatID: '1',
-        sender: MessageSenderEnum.USER,
-        text,
-      },
-    ]
+    const createdMessages = await createMessagesUseCase.create({
+      chatID: '1',
+      messages: [
+        {
+          sender: MessageSenderEnum.USER,
+          text: text,
+        },
+      ],
+    })
 
-    return await sendMessageUseCase.send({ messages })
+    return await sendMessageUseCase.send({
+      chatID: '1',
+      messages: createdMessages,
+    })
   }
 
   const handleOnSendMessage = async (text: string) => {
     try {
       const response = await sendMessages(text)
-      setMessagesState((prev) => [...prev, ...response.messages])
+      setMessagesState((prev) => [...prev, ...response])
     } catch {
       errorNotifier.notify(new UnexpectedError())
     }
