@@ -6,7 +6,7 @@ import { AIContentGeneratorParams } from '@/data/interfaces/AIContentGenerator'
 import { SendMessagesParams } from '@/domain/useCases/SendMessages'
 import { faker } from '@faker-js/faker'
 import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
-import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
+import { MessagesCreaterParams } from '@/data/interfaces/MessagesCreater'
 import { MessageSenderEnum } from '@/domain/entities/Message'
 
 const makeSUT = () => {
@@ -56,7 +56,7 @@ describe('SendMessagesImpl', () => {
     }))
 
     const messagesWithoutID = [...aiMessages]
-    const expectedParams: MessagesCreater.Params = {
+    const expectedParams: MessagesCreaterParams = {
       messages: messagesWithoutID,
     }
     expect(messagesCreater.create).toBeCalledWith(expectedParams)

@@ -1,11 +1,9 @@
 import { Message } from '@/domain/entities/Message'
 
-export namespace MessagesCreater {
-  export interface Params {
-    messages: Omit<Message, 'id'>[]
-  }
+export interface MessagesCreaterParams {
+  messages: Omit<Message, 'id'>[]
+}
 
-  export interface Implementation {
-    create: (params: Params) => Promise<Message[]>
-  }
+export interface MessagesCreater {
+  create: (params: MessagesCreaterParams) => Promise<Message[]>
 }

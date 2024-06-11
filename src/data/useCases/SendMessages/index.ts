@@ -12,7 +12,7 @@ import {
 export class SendMessagesImpl implements SendMessagesUseCase {
   constructor(
     private readonly aiContentGenerator: AIContentGenerator,
-    private readonly messagesCreater: MessagesCreater.Implementation,
+    private readonly messagesCreater: MessagesCreater,
   ) {}
 
   async send(params: SendMessagesParams): Promise<Message[]> {
