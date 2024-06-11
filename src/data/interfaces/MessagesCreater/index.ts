@@ -1,7 +1,7 @@
 import { Message } from '@/domain/entities/Message'
 
 export interface MessagesCreaterParams {
-  messages: Omit<Message, 'id'>[]
+  messages: Pick<Message, 'chatID' | 'sender' | 'text'>[]
 }
 
 export interface MessagesCreater {
