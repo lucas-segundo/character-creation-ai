@@ -6,5 +6,5 @@ export interface CreateMessagesParams {
 }
 
 export interface CreateMessagesUseCase {
-  Create: (params: CreateMessagesParams) => Promise<Message[]>
+  create: (params: CreateMessagesParams) => Promise<Message[]>
 }
