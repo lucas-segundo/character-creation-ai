@@ -2,7 +2,7 @@ import { mockAIContentGeneratorImplementation } from '@/data/interfaces/AIConten
 import { describe, expect, it } from 'vitest'
 import { SendMessagesImpl } from '.'
 import { mockMessage } from '@/domain/entities/Message/mock'
-import { AIContentGenerator } from '@/data/interfaces/AIContentGenerator'
+import { AIContentGeneratorParams } from '@/data/interfaces/AIContentGenerator'
 import { Params } from '@/domain/useCases/SendMessages'
 import { faker } from '@faker-js/faker'
 import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
@@ -14,7 +14,7 @@ const makeSUT = () => {
   const messagesCreater = mockMessagesCreaterImplementation()
   const sut = new SendMessagesImpl(aiContentGenerator, messagesCreater)
 
-  const aiResponse: AIContentGenerator.Response = {
+  const aiResponse: AIContentGeneratorParams = {
     texts: [faker.lorem.sentence(), faker.lorem.sentence()],
   }
   aiContentGenerator.generate.mockResolvedValueOnce(aiResponse)
@@ -33,7 +33,7 @@ describe('SendMessagesImpl', () => {
     }
     await sut.send(sendParams)
 
-    const expectedParams: AIContentGenerator.Params = {
+    const expectedParams: AIContentGeneratorParams = {
       texts: messages.map((message) => message.text),
     }
     expect(aiContentGenerator.generate).toBeCalledWith(expectedParams)

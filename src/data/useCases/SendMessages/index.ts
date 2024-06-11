@@ -1,28 +1,31 @@
-import { AIContentGenerator } from '@/data/interfaces/AIContentGenerator'
+import {
+  AIContentGenerator,
+  AIContentGeneratorResult,
+} from '@/data/interfaces/AIContentGenerator'
 import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
 import { Message, MessageSenderEnum } from '@/domain/entities/Message'
 import { SendMessagesUseCase, Params } from '@/domain/useCases/SendMessages'
 
 export class SendMessagesImpl implements SendMessagesUseCase {
   constructor(
-    private readonly aiContentGenerator: AIContentGenerator.Implementation,
+    private readonly aiContentGenerator: AIContentGenerator,
     private readonly messagesCreater: MessagesCreater.Implementation,
   ) {}
 
   async send(params: Params): Promise<Message[]> {
-    const response = await this.aiContentGenerator.generate({
+    const content = await this.aiContentGenerator.generate({
       texts: params.messages.map((message) => message.text),
     })
-    const createdMessages = await this.createMessages(params.chatID, response)
+    const createdMessages = await this.createMessages(params.chatID, content)
 
     return createdMessages
   }
 
   private async createMessages(
     chatID: string,
-    response: AIContentGenerator.Response,
+    content: AIContentGeneratorResult,
   ) {
-    const responseMessages = response.texts.map((text) => ({
+    const responseMessages = content.texts.map((text) => ({
       text,
       chatID,
       sender: MessageSenderEnum.BOT,
