@@ -1,9 +1,9 @@
 import { mockAIContentGeneratorImplementation } from '@/data/interfaces/AIContentGenerator/mock'
 import { describe, expect, it } from 'vitest'
-import { SendMessagesUseCase } from '.'
+import { SendMessagesImpl } from '.'
 import { mockMessage } from '@/domain/entities/Message/mock'
 import { AIContentGenerator } from '@/data/interfaces/AIContentGenerator'
-import { SendMessages } from '@/domain/useCases/SendMessages'
+import { Params } from '@/domain/useCases/SendMessages'
 import { faker } from '@faker-js/faker'
 import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
 import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
@@ -12,7 +12,7 @@ import { MessageSenderEnum } from '@/domain/entities/Message'
 const makeSUT = () => {
   const aiContentGenerator = mockAIContentGeneratorImplementation()
   const messagesCreater = mockMessagesCreaterImplementation()
-  const sut = new SendMessagesUseCase(aiContentGenerator, messagesCreater)
+  const sut = new SendMessagesImpl(aiContentGenerator, messagesCreater)
 
   const aiResponse: AIContentGenerator.Response = {
     texts: [faker.lorem.sentence(), faker.lorem.sentence()],
@@ -22,12 +22,12 @@ const makeSUT = () => {
   return { sut, aiContentGenerator, messagesCreater, aiResponse }
 }
 
-describe('SendMessagesUseCase', () => {
+describe('SendMessagesImpl', () => {
   it('should call generate with correct params', async () => {
     const { sut, aiContentGenerator } = makeSUT()
     const messages = [mockMessage(), mockMessage()]
 
-    const sendParams: SendMessages.Params = {
+    const sendParams: Params = {
       chatID: faker.string.uuid(),
       messages,
     }
@@ -43,7 +43,7 @@ describe('SendMessagesUseCase', () => {
     const { sut, messagesCreater, aiResponse } = makeSUT()
 
     const messages = [mockMessage(), mockMessage()]
-    const sendParams: SendMessages.Params = {
+    const sendParams: Params = {
       chatID: faker.string.uuid(),
       messages,
     }
@@ -68,7 +68,7 @@ describe('SendMessagesUseCase', () => {
     const messages = [mockMessage(), mockMessage()]
     messagesCreater.create.mockResolvedValueOnce(messages)
 
-    const sendParams: SendMessages.Params = {
+    const sendParams: Params = {
       chatID: faker.string.uuid(),
       messages,
     }
