@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { SendMessagesImpl } from '.'
 import { mockMessage } from '@/domain/entities/Message/mock'
 import { AIContentGeneratorParams } from '@/data/interfaces/AIContentGenerator'
-import { Params } from '@/domain/useCases/SendMessages'
+import { SendMessagesParams } from '@/domain/useCases/SendMessages'
 import { faker } from '@faker-js/faker'
 import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
 import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
@@ -27,7 +27,7 @@ describe('SendMessagesImpl', () => {
     const { sut, aiContentGenerator } = makeSUT()
     const messages = [mockMessage(), mockMessage()]
 
-    const sendParams: Params = {
+    const sendParams: SendMessagesParams = {
       chatID: faker.string.uuid(),
       messages,
     }
@@ -43,7 +43,7 @@ describe('SendMessagesImpl', () => {
     const { sut, messagesCreater, aiResponse } = makeSUT()
 
     const messages = [mockMessage(), mockMessage()]
-    const sendParams: Params = {
+    const sendParams: SendMessagesParams = {
       chatID: faker.string.uuid(),
       messages,
     }
@@ -68,7 +68,7 @@ describe('SendMessagesImpl', () => {
     const messages = [mockMessage(), mockMessage()]
     messagesCreater.create.mockResolvedValueOnce(messages)
 
-    const sendParams: Params = {
+    const sendParams: SendMessagesParams = {
       chatID: faker.string.uuid(),
       messages,
     }

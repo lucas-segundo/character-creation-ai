@@ -4,7 +4,10 @@ import {
 } from '@/data/interfaces/AIContentGenerator'
 import { MessagesCreater } from '@/data/interfaces/MessagesCreater'
 import { Message, MessageSenderEnum } from '@/domain/entities/Message'
-import { SendMessagesUseCase, Params } from '@/domain/useCases/SendMessages'
+import {
+  SendMessagesUseCase,
+  SendMessagesParams,
+} from '@/domain/useCases/SendMessages'
 
 export class SendMessagesImpl implements SendMessagesUseCase {
   constructor(
@@ -12,7 +15,7 @@ export class SendMessagesImpl implements SendMessagesUseCase {
     private readonly messagesCreater: MessagesCreater.Implementation,
   ) {}
 
-  async send(params: Params): Promise<Message[]> {
+  async send(params: SendMessagesParams): Promise<Message[]> {
     const content = await this.aiContentGenerator.generate({
       texts: params.messages.map((message) => message.text),
     })

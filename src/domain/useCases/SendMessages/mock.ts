@@ -1,10 +1,10 @@
 import { vi, Mocked } from 'vitest'
-import { Params, SendMessagesUseCase } from '.'
+import { SendMessagesParams, SendMessagesUseCase } from '.'
 import { faker } from '@faker-js/faker'
 import { mockMessage } from '@/domain/entities/Message/mock'
 
-export const mockParams = (): Params => ({
-  chatId: faker.string.uuid(),
+export const mockSendMessagesParams = (): SendMessagesParams => ({
+  chatID: faker.string.uuid(),
   messages: [mockMessage(), mockMessage()],
 })
 
