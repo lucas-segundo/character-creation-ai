@@ -9,5 +9,5 @@ export const mockCreateMessagesParams = (): CreateMessagesParams => ({
 })
 
 export const mockCreateMessagesUseCase = (): Mocked<CreateMessagesUseCase> => ({
-  Create: vi.fn(),
+  create: vi.fn(),
 })
