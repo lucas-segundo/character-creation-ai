@@ -5,13 +5,13 @@ import { mockMessage } from '@/domain/entities/Message/mock'
 import { AIContentGeneratorParams } from '@/data/interfaces/AIContentGenerator'
 import { SendMessagesParams } from '@/domain/useCases/SendMessages'
 import { faker } from '@faker-js/faker'
-import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
 import { MessagesCreaterParams } from '@/data/interfaces/MessagesCreater'
 import { MessageSenderEnum } from '@/domain/entities/Message'
+import { mockMessagesCreater } from '@/data/interfaces/MessagesCreater/mock'
 
 const makeSUT = () => {
   const aiContentGenerator = mockAIContentGeneratorImplementation()
-  const messagesCreater = mockMessagesCreaterImplementation()
+  const messagesCreater = mockMessagesCreater()
   const sut = new SendMessagesImpl(aiContentGenerator, messagesCreater)
 
   const aiResponse: AIContentGeneratorParams = {
