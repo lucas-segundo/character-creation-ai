@@ -3,10 +3,10 @@ import { CreateMessagesImpl } from '.'
 import { mockMessage } from '@/domain/entities/Message/mock'
 import { CreateMessagesParams } from '@/domain/useCases/CreateMessages'
 import { faker } from '@faker-js/faker'
-import { mockMessagesCreaterImplementation } from '@/data/interfaces/MessagesCreater/mock'
+import { mockMessagesCreater } from '@/data/interfaces/MessagesCreater/mock'
 
 const makeSUT = () => {
-  const messagesCreater = mockMessagesCreaterImplementation()
+  const messagesCreater = mockMessagesCreater()
   const sut = new CreateMessagesImpl(messagesCreater)
 
   return { sut, messagesCreater }
@@ -23,7 +23,13 @@ describe('CreateMessagesImpl', () => {
     }
     await sut.create(createParams)
 
-    expect(messagesCreater.create).toBeCalledWith(createParams)
+    const expectedMessages = messages.map((message) => ({
+      ...message,
+      chatID: createParams.chatID,
+    }))
+    expect(messagesCreater.create).toBeCalledWith({
+      messages: expectedMessages,
+    })
   })
 
   it('should return created messages', async () => {
