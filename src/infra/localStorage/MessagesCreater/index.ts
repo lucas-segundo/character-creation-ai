@@ -3,6 +3,7 @@ import {
   MessagesCreaterParams,
 } from '@/data/interfaces/MessagesCreater'
 import { Message } from '@/domain/entities/Message'
+import { v4 as uuidv4 } from 'uuid';
 
 export class LocalStorageMessagesCreater implements MessagesCreater {
   create(params: MessagesCreaterParams): Promise<Message[]> {
@@ -14,7 +15,7 @@ export class LocalStorageMessagesCreater implements MessagesCreater {
   private createMessages(params: MessagesCreaterParams) {
     const messagesWithID = params.messages.map((message) => ({
       ...message,
-      id: Date.now().toString(),
+      id: uuidv4(),
     }))
 
     const currentMessages = JSON.parse(localStorage.getItem('messages') || '[]')
