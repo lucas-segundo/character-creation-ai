@@ -1,20 +1,11 @@
-import { Message } from '@/domain/entities/Message'
-import { mockMessage } from '@/domain/entities/Message/mock'
+import { CreateMessagesImpl } from '@/data/useCases/CreateMessages'
 import {
   CreateMessagesUseCase,
-  CreateMessagesParams,
 } from '@/domain/useCases/CreateMessages'
+import { LocalStorageMessagesCreater } from '@/infra/localStorage/MessagesCreater'
 
 export const makeCreateMessagesUseCase = (): CreateMessagesUseCase => {
-  class CreateMessagesUseCaseMocked implements CreateMessagesUseCase {
-    async create(params: CreateMessagesParams): Promise<Message[]> {
-      console.log('Create params', params)
+  const localStorageMessagesCreater = new LocalStorageMessagesCreater()
 
-      const responseMessages = [mockMessage(), mockMessage()]
-
-      return responseMessages
-    }
-  }
-
-  return new CreateMessagesUseCaseMocked()
+  return new CreateMessagesImpl(localStorageMessagesCreater)
 }
