@@ -1,20 +1,23 @@
-import { Message } from '@/domain/entities/Message'
-import { mockMessage } from '@/domain/entities/Message/mock'
-import {
-  SendMessagesUseCase,
-  SendMessagesParams,
-} from '@/domain/useCases/SendMessages'
+import { SendMessagesImpl } from '@/data/useCases/SendMessages'
+import { SendMessagesUseCase } from '@/domain/useCases/SendMessages'
+import { startGiminiChat } from '@/infra/gemini'
+import { GeminiAIContentGenerator } from '@/infra/gemini/AIContentGenerator'
+import { falloutCharacterCreationInstructions } from '@/infra/gemini/instructions/falloutCharacterCreation'
+import { LocalStorageMessagesCreater } from '@/infra/localStorage/MessagesCreater'
 
 export const makeSendMessagesUseCase = (): SendMessagesUseCase => {
-  class SendMessagesUseCaseMocked implements SendMessagesUseCase {
-    async send({ messages }: SendMessagesParams): Promise<Message[]> {
-      console.log(messages)
+  const geminiAPIKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
-      const responseMessages = [mockMessage(), mockMessage()]
-
-      return responseMessages
-    }
+  if (!geminiAPIKey) {
+    throw new Error('NEXT_PUBLIC_GEMINI_API_KEY is required')
   }
 
-  return new SendMessagesUseCaseMocked()
+  const chat = startGiminiChat({
+    apiKey: geminiAPIKey,
+    systemInstruction: falloutCharacterCreationInstructions,
+  })
+  const generator = new GeminiAIContentGenerator(chat)
+  const messagesCreater = new LocalStorageMessagesCreater()
+
+  return new SendMessagesImpl(generator, messagesCreater)
 }
