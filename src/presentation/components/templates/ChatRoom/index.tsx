@@ -32,6 +32,8 @@ export const ChatRoom = ({
       ],
     })
 
+    setMessagesState((prev) => [...prev, ...createdMessages])
+
     return await sendMessageUseCase.send({
       chatID: '1',
       messages: createdMessages,
