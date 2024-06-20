@@ -8,12 +8,8 @@ import { mockErrorNotifier } from '@/presentation/interfaces/ErrorNotifier/mock'
 import { UnexpectedError } from '@/domain/errors/UnexpectedError'
 import { mockCreateMessagesUseCase } from '@/domain/useCases/CreateMessages/mock'
 import { CreateMessagesParams } from '@/domain/useCases/CreateMessages'
-import {
-  mockSendMessagesParams,
-  mockSendMessagesUseCase,
-} from '@/domain/useCases/SendMessages/mock'
+import { mockSendMessagesUseCase } from '@/domain/useCases/SendMessages/mock'
 import { mockMessage } from '@/domain/entities/Message/mock'
-import { SendMessagesParams } from '@/domain/useCases/SendMessages'
 
 const makeSUT = () => {
   const sendMessageUseCase = mockSendMessagesUseCase()
@@ -34,6 +30,7 @@ describe('ChatRoom', () => {
   it('should call create messages with right params', async () => {
     const { createMessagesUseCase, sendMessageUseCase } = makeSUT()
 
+    createMessagesUseCase.create.mockResolvedValueOnce([mockMessage()])
     sendMessageUseCase.send.mockResolvedValue([mockMessage()])
 
     const user = userEvent.setup()
@@ -59,6 +56,7 @@ describe('ChatRoom', () => {
 
     const createdMessages = [mockMessage()]
     createMessagesUseCase.create.mockResolvedValueOnce(createdMessages)
+    sendMessageUseCase.send.mockResolvedValue([mockMessage()])
 
     const user = userEvent.setup()
     const text = faker.lorem.sentence()
@@ -66,7 +64,6 @@ describe('ChatRoom', () => {
     await user.type(screen.getByTestId('message-input'), text)
     await user.click(screen.getByTestId('send-button'))
 
-    sendMessageUseCase.send.mockResolvedValue([mockMessage()])
     expect(sendMessageUseCase.send).toBeCalledWith({
       chatID: '1',
       messages: createdMessages,
@@ -74,10 +71,12 @@ describe('ChatRoom', () => {
   })
 
   it('should call error notifier with right params', async () => {
-    const { sendMessageUseCase, errorNotifier } = makeSUT()
+    const { sendMessageUseCase, errorNotifier, createMessagesUseCase } =
+      makeSUT()
 
     const error = new UnexpectedError()
     sendMessageUseCase.send.mockRejectedValue(error)
+    createMessagesUseCase.create.mockResolvedValueOnce([mockMessage()])
 
     const user = userEvent.setup()
 
@@ -85,5 +84,25 @@ describe('ChatRoom', () => {
     await user.click(screen.getByTestId('send-button'))
 
     expect(errorNotifier.notify).toBeCalledWith(error)
+  })
+
+  it('should render messages', async () => {
+    const { createMessagesUseCase, sendMessageUseCase } = makeSUT()
+
+    const createdMessages = [mockMessage(), mockMessage()]
+    createMessagesUseCase.create.mockResolvedValueOnce(createdMessages)
+
+    const response = [mockMessage(), mockMessage()]
+    sendMessageUseCase.send.mockResolvedValue(response)
+
+    const user = userEvent.setup()
+
+    await user.type(screen.getByTestId('message-input'), faker.lorem.sentence())
+    await user.click(screen.getByTestId('send-button'))
+
+    const allMessages = [...createdMessages, ...response]
+    allMessages.forEach((message) => {
+      expect(screen.getByText(message.text)).toBeInTheDocument()
+    })
   })
 })
